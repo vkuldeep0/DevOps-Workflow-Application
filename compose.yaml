@@ -1,0 +1,57 @@
+services:
+  app:
+    build:
+      context: .
+      network: host
+    environment:
+      DB_HOST: postgres
+      DB_USER: devops_app
+      DB_NAME: devops_db
+      DB_PORT: 5432
+      DB_PASSWORD: ${DB_PASSWORD}
+    networks:
+      - devops-net
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:8000/health || exit 1"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_USER: devops_app
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: devops_db
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    networks:
+      - devops-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U devops_app -d devops_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      - devops-net
+    depends_on:
+      app:
+        condition: service_healthy
+
+
+networks:
+  devops-net:
+
+volumes:
+  postgres-data:
+    external: true
