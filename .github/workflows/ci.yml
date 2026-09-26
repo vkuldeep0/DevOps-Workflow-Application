@@ -12,6 +12,9 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    env:
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
     steps:
       - name: Checkout repositary
         uses: actions/checkout@v4
