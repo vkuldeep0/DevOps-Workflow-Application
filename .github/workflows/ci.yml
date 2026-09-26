@@ -19,8 +19,21 @@ jobs:
       - name: Validate Docker Compose
         run: docker compose config
 
-      - name: Build application image
-        run: docker compose build app
+      - name: Build application and Nginx images
+        run: docker compose build
 
-      - name: Build Nginx image
-        run: docker compose build nginx
+      - name: Start application stack
+        run: docker compose up -d
+
+      - name: Check container status
+        run: docker compose ps
+
+      - name: Test application health
+        run: curl --fail http://127.0.0.1/health
+
+      - name: Test database health
+        run: curl --fail http://127.0.0.1/db-health
+
+      - name: Show logs
+        if: always()
+        run: docker compose logs
