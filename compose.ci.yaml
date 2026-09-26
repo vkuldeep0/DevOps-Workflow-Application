@@ -1,0 +1,7 @@
+services:
+  postgres:
+    volume:
+      - ci-postgres-data:/var/lib/postgresql
+
+volumes:
+  ci-postgres-data:
