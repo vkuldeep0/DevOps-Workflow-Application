@@ -12,15 +12,15 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Checkout repositary
-      uses: actions/checkout@v4
+    steps:
+      - name: Checkout repositary
+        uses: actions/checkout@v4
 
-    - name: Validate Docker Compose
-      uses: docker compose config
+      - name: Validate Docker Compose
+        uses: docker compose config
 
-    - name: Build application image
-      uses: docker compose build app
+      - name: Build application image
+        uses: docker compose build app
 
-    - name: Build Nginx image
-      uses: docker compose build nginx
+      - name: Build Nginx image
+        uses: docker compose build nginx
